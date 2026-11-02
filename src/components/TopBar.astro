@@ -1,0 +1,15 @@
+---
+import { site } from '../data/portfolio';
+---
+
+<header class="topbar">
+  <span class="topbar__prompt"><span class="topbar__logo" aria-hidden="true">&gt;_</span>{site.name}@portfolio:~</span>
+  <nav class="topbar__right" aria-label="Site tools">
+    <span class="topbar__version"><span class="dot dot--ok" aria-hidden="true"></span>Portfolio {site.version}</span>
+    <button type="button" class="toggle" data-inspector-toggle aria-pressed="false">
+      <span class="toggle__ring" aria-hidden="true"></span>
+      Inspector: <span data-inspector-label>OFF</span>
+    </button>
+    <a class="topbar__link" href={site.resume} data-resume>Resume (PDF)</a>
+  </nav>
+</header>

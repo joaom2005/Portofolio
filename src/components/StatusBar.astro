@@ -1,0 +1,16 @@
+---
+import { site } from '../data/portfolio';
+---
+
+<footer class="statusbar">
+  <p class="statusbar__mode" aria-live="polite">
+    <span class="dot dot--ok" aria-hidden="true"></span>
+    <strong data-mode-name>Normal mode:</strong>
+    <span data-mode-text>Browse freely, or enable Inspector for more details.</span>
+  </p>
+  <p class="statusbar__keys">
+    <button type="button" class="key-btn" data-inspector-toggle-key><kbd>I</kbd> Toggle Inspector</button>
+    <a class="key-btn" href={site.resume}><kbd>R</kbd> Open Résumé</a>
+  </p>
+  <a class="btn" href={`mailto:${site.email}`}>Get in Touch</a>
+</footer>

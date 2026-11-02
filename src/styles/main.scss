@@ -1,0 +1,544 @@
+// ---------------------------------------------------------------------------
+// Theme tokens. Swap these and the whole site changes. Dark is the default;
+// a light "datasheet" palette is available by setting data-theme="light" on
+// <html> (not wired to any toggle yet).
+// ---------------------------------------------------------------------------
+:root {
+  --bg: #070d18;
+  --panel: #0b1220;
+  --panel-2: #0f1a2e;
+  --line: #1c2a44;
+  --text: #d6deeb;
+  --muted: #8393ad;
+  --accent: #7aa2f7;
+  --accent-bg: #162a52;
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --radius: 10px;
+  --mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+:root[data-theme='light'] {
+  --bg: #f4f1ea;
+  --panel: #fbf9f4;
+  --panel-2: #efeadf;
+  --line: #d7cfbd;
+  --text: #1f2430;
+  --muted: #5d6578;
+  --accent: #1d4ed8;
+  --accent-bg: #dbe6ff;
+  --ok: #15803d;
+  --warn: #b45309;
+  color-scheme: light;
+}
+
+$bp: 860px;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+dl {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+  &:focus {
+    left: 1rem;
+    top: 1rem;
+    z-index: 10;
+    background: var(--panel);
+    padding: 0.5rem 1rem;
+  }
+}
+
+.dot {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  &--ok {
+    background: var(--ok);
+  }
+}
+
+// ---- buttons ---------------------------------------------------------------
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  text-decoration: none;
+  background: transparent;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  &:hover {
+    background: var(--accent-bg);
+  }
+  &--small {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+// ---- top bar ---------------------------------------------------------------
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+
+  &__prompt {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  &__logo {
+    color: var(--ok);
+    margin-right: 0.6rem;
+  }
+  &__right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.82rem;
+  }
+  &__link {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+
+  &__ring {
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+  }
+  &[aria-pressed='true'] .toggle__ring {
+    background: var(--accent);
+  }
+}
+
+// ---- layout ----------------------------------------------------------------
+.shell {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(280px, 34%) 1fr;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  min-height: 0;
+
+  @media (max-width: $bp) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.procs,
+.viewer {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+// ---- process table ---------------------------------------------------------
+.procs {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  &__cmd {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  &__dollar {
+    color: var(--ok);
+    margin-right: 0.5rem;
+  }
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid var(--line);
+    }
+    td {
+      padding: 0.55rem 0.6rem;
+      vertical-align: top;
+    }
+    tbody tr {
+      cursor: pointer;
+      &:hover {
+        background: var(--panel-2);
+      }
+      &.is-active {
+        background: var(--accent-bg);
+      }
+    }
+    a {
+      color: var(--text);
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  &__desc {
+    color: var(--accent);
+  }
+  &__hint {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: $bp) {
+    // Compact menu on phones: hide the description column and the hint.
+    &__desc,
+    &__desc-head,
+    &__hint {
+      display: none;
+    }
+    &__cmd {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.state {
+  &--running {
+    color: var(--ok);
+  }
+  &--listening {
+    color: var(--warn);
+  }
+}
+
+// ---- viewer ----------------------------------------------------------------
+.viewer {
+  min-width: 0;
+
+  &__tabs {
+    padding: 0.5rem 0.75rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--accent);
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--accent-bg);
+    color: var(--accent);
+  }
+  &__body {
+    padding: 1.5rem;
+    @media (max-width: $bp) {
+      padding: 1rem;
+    }
+  }
+}
+
+// Without JS every panel is visible. With JS only the active one is.
+.panel + .panel {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px dashed var(--line);
+}
+.js .panel {
+  display: none;
+  &.is-active {
+    display: block;
+  }
+}
+.js .panel + .panel {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.crumb {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+h1,
+h2 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+h3 {
+  font-size: 1.05rem;
+}
+
+.lead {
+  color: var(--text);
+  max-width: 65ch;
+  margin-bottom: 1.25rem;
+}
+
+.panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.facts {
+  display: grid;
+  gap: 0.5rem;
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+  }
+  dt {
+    min-width: 9rem;
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+  }
+}
+
+.links {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.skills {
+  display: grid;
+  gap: 1.25rem;
+  h3 {
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+}
+
+// ---- chips -----------------------------------------------------------------
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  li {
+    padding: 0.15rem 0.8rem;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+}
+
+// ---- projects --------------------------------------------------------------
+.projects {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.project {
+  display: grid;
+  gap: 0.9rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+  &:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  &__summary {
+    color: var(--muted);
+    max-width: 70ch;
+  }
+  &__shots img {
+    display: block;
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  &__list {
+    display: grid;
+    gap: 0.4rem;
+    li {
+      padding-left: 1.2rem;
+      position: relative;
+      &::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+      }
+    }
+  }
+}
+
+// ---- inspector -------------------------------------------------------------
+.inspect-only {
+  display: none;
+}
+.inspector .inspect-only {
+  display: block;
+}
+
+.errata {
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--warn);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  h4 {
+    color: var(--warn);
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+  li {
+    padding-left: 1.2rem;
+    position: relative;
+    &::before {
+      content: '!';
+      position: absolute;
+      left: 0.3rem;
+      color: var(--warn);
+    }
+  }
+}
+
+// ---- status bar ------------------------------------------------------------
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.82rem;
+
+  &__mode {
+    strong {
+      color: var(--ok);
+      margin-right: 0.4rem;
+    }
+  }
+  &__keys {
+    display: flex;
+    gap: 1.25rem;
+    margin-right: auto;
+    @media (max-width: $bp) {
+      display: none; // keyboard shortcuts are meaningless on touch devices
+    }
+  }
+}
+
+.key-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--text);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6rem;
+  padding: 0.05rem 0.4rem;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel-2);
+  font-family: var(--mono);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn,
+  .procs__table tbody tr {
+    transition: background-color 0.15s ease;
+  }
+}

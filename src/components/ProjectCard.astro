@@ -1,0 +1,42 @@
+---
+import type { Project } from '../data/portfolio';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<article class="project">
+  <header class="project__head">
+    <h3>{project.title}</h3>
+    <a class="btn btn--small" href={project.repo} target="_blank" rel="noopener noreferrer">
+      Repo ↗
+    </a>
+  </header>
+  <p class="project__summary">{project.summary}</p>
+
+  <div class="project__shots">
+    {
+      project.images.map((img) => (
+        <img src={img.src} alt={img.alt} width="900" height="500" loading="lazy" decoding="async" />
+      ))
+    }
+  </div>
+
+  <ul class="chips" aria-label="Technologies">
+    {project.tags.map((t) => <li>{t}</li>)}
+  </ul>
+
+  <ul class="project__list">
+    {project.highlights.map((h) => <li>{h}</li>)}
+  </ul>
+
+  <!-- Inspector mode only -->
+  <div class="inspect-only errata">
+    <h4><span aria-hidden="true">[errata]</span> What broke / what I learned</h4>
+    <ul>
+      {project.errata.map((e) => <li>{e}</li>)}
+    </ul>
+  </div>
+</article>
