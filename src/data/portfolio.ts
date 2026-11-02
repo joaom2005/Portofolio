@@ -12,7 +12,7 @@ export const site = {
     'Software engineering student focused on low-level systems, embedded/IoT and security.',
   github: 'https://github.com/joaom2005',
   email: 'joao.p.f.martins2005@proton.me',
-  resume: '/resume.pdf', // TODO: drop your PDF into /public/resume.pdf
+  resume: '/files/Resume.pdf',
 };
 
 export type ProcessState = 'running' | 'listening';
