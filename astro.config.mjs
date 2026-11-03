@@ -1,7 +1,6 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import icon from "astro-icon";
 
-// Fully static output: the built site is plain HTML/CSS/JS that any web server
-// (nginx in a Docker container on your old PC, for example) can serve.
 export default defineConfig({
-  // site: 'https://your-domain.tld',
+  integrations: [icon()],
 });

@@ -1,9 +1,12 @@
 ---
-import { processes } from '../data/portfolio';
+import { processes } from "../data/portfolio";
+import { Icon } from "astro-icon/components";
 ---
 
 <aside class="procs" aria-label="Sections">
-  <p class="procs__cmd"><span class="procs__dollar">$</span> ./portfolio --inspect</p>
+  <p class="procs__cmd">
+    <span class="procs__dollar">$</span> ./portfolio --inspect
+  </p>
   <table class="procs__table">
     <thead>
       <tr>
@@ -30,5 +33,7 @@ import { processes } from '../data/portfolio';
       }
     </tbody>
   </table>
-  <p class="procs__hint">Click a process to view details…</p>
+  <p class="procs__hint">
+    <Icon name="mdi:information" /> Click a process to view details…
+  </p>
 </aside>
