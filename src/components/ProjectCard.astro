@@ -1,17 +1,19 @@
 ---
 import type { Project } from '../data/portfolio';
+import { ui, getLang } from '../i18n/ui';
 
 interface Props {
   project: Project;
 }
 const { project } = Astro.props;
+const t = ui[getLang(Astro.currentLocale)];
 ---
 
 <article class="project">
   <header class="project__head">
     <h3>{project.title}</h3>
     <a class="btn btn--small" href={project.repo} target="_blank" rel="noopener noreferrer">
-      Repo ↗
+      {t.repo}
     </a>
   </header>
   <p class="project__summary">{project.summary}</p>
@@ -24,8 +26,8 @@ const { project } = Astro.props;
     }
   </div>
 
-  <ul class="chips" aria-label="Technologies">
-    {project.tags.map((t) => <li>{t}</li>)}
+  <ul class="chips" aria-label={t.technologies}>
+    {project.tags.map((tag) => <li>{tag}</li>)}
   </ul>
 
   <ul class="project__list">
@@ -34,7 +36,7 @@ const { project } = Astro.props;
 
   <!-- Inspector mode only -->
   <div class="inspect-only errata">
-    <h4><span aria-hidden="true">[errata]</span> What broke / what I learned</h4>
+    <h4><span aria-hidden="true">[errata]</span> {t.errata}</h4>
     <ul>
       {project.errata.map((e) => <li>{e}</li>)}
     </ul>

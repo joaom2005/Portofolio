@@ -1,7 +1,12 @@
 ---
-import { site } from "../data/portfolio";
-
 import { Icon } from "astro-icon/components";
+import LangSwitcher from "./LangSwitcher.astro";
+import { site, getContent } from "../data/portfolio";
+import { ui, getLang } from "../i18n/ui";
+
+const lang = getLang(Astro.currentLocale); // "en" on /, "pt" on /pt/
+const t = ui[lang];
+const { resume } = getContent(lang);
 ---
 
 <header class="topbar">
@@ -10,9 +15,9 @@ import { Icon } from "astro-icon/components";
       site.name
     }@portfolio:~</span
   >
-  <nav class="topbar__right" aria-label="Site tools">
+  <nav class="topbar__right" aria-label={t.topbar.siteTools}>
     <span class="topbar__version"
-      ><span class="dot dot--ok" aria-hidden="true"></span>Portfolio {
+      ><span class="dot dot--ok" aria-hidden="true"></span>{t.topbar.portfolio} {
         site.version
       }</span
     > |
@@ -23,11 +28,11 @@ import { Icon } from "astro-icon/components";
       aria-pressed="false"
     >
       <span class="toggle__ring" aria-hidden="true"></span>
-      Inspector: <span data-inspector-label>OFF</span>
+      {t.topbar.inspector}: <span data-inspector-label>{t.topbar.off}</span>
     </button> |
-    <a class="topbar__link" href={site.resume} data-resume
-      ><Icon name="mdi:tray-arrow-down" /> Resume (PDF)</a
-    >
+    <a class="topbar__link" href={resume} data-resume
+      ><Icon name="mdi:tray-arrow-down" /> {t.topbar.resume}</a
+    > |
+    <LangSwitcher />
   </nav>
-</header>} />
-
+</header>

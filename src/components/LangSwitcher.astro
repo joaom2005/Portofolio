@@ -1,0 +1,40 @@
+---
+// Language dropdown. Lists every language from `languages` in src/i18n/ui.ts,
+// so adding a language needs no change here. Built on <details>, so it opens
+// and closes without JavaScript (portfolio.ts only adds click-outside / Esc).
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { Icon } from "astro-icon/components";
+import { languages, locales, ui, getLang } from "../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const t = ui[lang];
+---
+
+<details class="lang" data-lang-menu>
+  <summary
+    class="lang__button"
+    aria-label={`${t.topbar.language}: ${languages[lang].label}`}
+  >
+    <Icon name={languages[lang].flag} class="lang__flag" size={16} />
+    <span>{languages[lang].label}</span>
+    <Icon name="mdi:chevron-down" class="lang__chevron" size={16} />
+  </summary>
+  <ul class="lang__menu">
+    {
+      locales.map((l) => (
+        <li>
+          <a
+            href={getRelativeLocaleUrl(l)}
+            hreflang={l}
+            lang={l}
+            aria-current={l === lang ? "true" : undefined}
+            data-lang-link
+          >
+            <Icon name={languages[l].flag} class="lang__flag" size={16} />
+            {languages[l].label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>

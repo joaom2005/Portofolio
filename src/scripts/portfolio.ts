@@ -19,6 +19,39 @@ const inspectorLabel = document.querySelector<HTMLElement>('[data-inspector-labe
 const modeName = document.querySelector<HTMLElement>('[data-mode-name]');
 const modeText = document.querySelector<HTMLElement>('[data-mode-text]');
 const resume = document.querySelector<HTMLAnchorElement>('[data-resume]');
+const langMenu = document.querySelector<HTMLDetailsElement>('[data-lang-menu]');
+const langLinks = document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]');
+
+// UI strings for the current language, put on <body data-ui> by Base.astro.
+type UiStrings = {
+  on: string;
+  off: string;
+  normalName: string;
+  inspectorName: string;
+  normalText: string;
+  inspectorText: string;
+  closeTab: string;
+};
+const ui: UiStrings = JSON.parse(document.body.dataset.ui ?? '{}');
+
+// Keep the open section when switching language: /#projects <-> /pt/#projects.
+function syncLangSwitch(): void {
+  langLinks.forEach((a) => {
+    a.hash = location.hash;
+  });
+}
+
+// Language dropdown: it opens/closes on its own (<details>); close it on an
+// outside click or Escape.
+document.addEventListener('click', (e) => {
+  if (langMenu?.open && !langMenu.contains(e.target as Node)) langMenu.open = false;
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && langMenu?.open) {
+    langMenu.open = false;
+    langMenu.querySelector('summary')?.focus();
+  }
+});
 
 const isId = (v: string): v is Id =>
   (IDS as readonly string[]).includes(v);
@@ -38,6 +71,7 @@ let draggedTabId: Id | null = null;
 function updateHash(id: Id | null): void {
   const hash = id ? `#${id}` : '';
   history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+  syncLangSwitch();
 }
 
 function updateActiveSection(): void {
@@ -155,7 +189,7 @@ function renderTabs(): void {
     const closeButton = document.createElement('button');
     closeButton.className = 'tab__close';
     closeButton.type = 'button';
-    closeButton.setAttribute('aria-label', `Close ${tab.id} tab`);
+    closeButton.setAttribute('aria-label', ui.closeTab.replace('{id}', tab.id));
     closeButton.textContent = '×';
 
     closeButton.addEventListener('click', () => {
@@ -282,13 +316,11 @@ function setInspector(on: boolean): void {
   document.documentElement.classList.toggle('inspector', on);
   mainToggle?.setAttribute('aria-pressed', String(on));
 
-  if (inspectorLabel) inspectorLabel.textContent = on ? 'ON' : 'OFF';
-  if (modeName) modeName.textContent = on ? 'Inspector mode:' : 'Normal mode:';
+  if (inspectorLabel) inspectorLabel.textContent = on ? ui.on : ui.off;
+  if (modeName) modeName.textContent = on ? ui.inspectorName : ui.normalName;
 
   if (modeText) {
-    modeText.textContent = on
-      ? 'Showing errata: what broke and what I learned.'
-      : 'Browse freely, or enable Inspector for more details.';
+    modeText.textContent = on ? ui.inspectorText : ui.normalText;
   }
 
   try {
@@ -351,6 +383,7 @@ window.addEventListener('keydown', (e) => {
 // ---- init -------------------------------------------------------------------
 
 openTab(fromHash(), false);
+syncLangSwitch();
 
 try {
   setInspector(localStorage.getItem(KEY) === '1');

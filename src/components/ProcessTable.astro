@@ -1,19 +1,24 @@
 ---
-import { processes } from "../data/portfolio";
+import { getContent } from "../data/portfolio";
+import { ui, getLang } from "../i18n/ui";
 import { Icon } from "astro-icon/components";
+
+const lang = getLang(Astro.currentLocale);
+const t = ui[lang];
+const { processes } = getContent(lang);
 ---
 
-<aside class="procs" aria-label="Sections">
+<aside class="procs" aria-label={t.procs.label}>
   <p class="procs__cmd">
     <span class="procs__dollar">$</span> ./portfolio --inspect
   </p>
   <table class="procs__table">
     <thead>
       <tr>
-        <th scope="col">PID</th>
-        <th scope="col">NAME</th>
-        <th scope="col">STATE</th>
-        <th scope="col" class="procs__desc-head">DESCRIPTION</th>
+        <th scope="col">{t.procs.pid}</th>
+        <th scope="col">{t.procs.name}</th>
+        <th scope="col">{t.procs.state}</th>
+        <th scope="col" class="procs__desc-head">{t.procs.desc}</th>
       </tr>
     </thead>
     <tbody>
@@ -34,6 +39,6 @@ import { Icon } from "astro-icon/components";
     </tbody>
   </table>
   <p class="procs__hint">
-    <Icon name="mdi:information" /> Click a process to view details…
+    <Icon name="mdi:information" /> {t.procs.hint}
   </p>
 </aside>
