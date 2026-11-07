@@ -26,13 +26,25 @@ const alternates = Astro.site
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {alternates.map((a) => <link rel="alternate" hreflang={a.l} href={a.href} />)}
     <title>{title}</title>
     <!-- Progressive enhancement: without JS every section is shown stacked. -->
+    <!-- Runs before first paint so the page never flashes the wrong theme.
+         Saved choice wins; otherwise follow the system setting. -->
     <script is:inline>
       document.documentElement.classList.add('js');
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem('portfolio:theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
     </script>
   </head>
   <body data-ui={JSON.stringify(t.script)}>

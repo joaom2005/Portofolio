@@ -1,8 +1,28 @@
 // ---------------------------------------------------------------------------
-// Theme tokens. Swap these and the whole site changes. Dark is the default;
-// a light "datasheet" palette is available by setting data-theme="light" on
-// <html> (not wired to any toggle yet).
+// Theme tokens. Swap these and the whole site changes.
+//
+// Dark is the base. Light applies when <html data-theme="light"> (set by the
+// inline script in Base.astro from the saved choice, else the system setting,
+// and changed by the toggle in the top bar). If JS is off, `data-theme` is never
+// set, so the media query below makes the page follow the system setting anyway.
+//
+// All text pairs were checked against WCAG AA (4.5:1) in both palettes.
 // ---------------------------------------------------------------------------
+@mixin light-theme {
+  --bg: #f3f5f9;
+  --panel: #ffffff;
+  --panel-2: #eef2f8;
+  --line: #c5cedc;
+  --text: #1a2233;
+  --muted: #566178;
+  --accent: #1d4ed8;
+  --accent-bg: #e3ebff;
+  --ok: #15803d;
+  --warn: #b45309;
+  --shadow: 0 8px 24px rgb(26 34 51 / 0.14);
+  color-scheme: light;
+}
+
 :root {
   --bg: #070d18;
   --panel: #0b1220;
@@ -14,22 +34,20 @@
   --accent-bg: #162a52;
   --ok: #4ade80;
   --warn: #fbbf24;
+  --shadow: 0 8px 24px rgb(0 0 0 / 0.35);
   --radius: 10px;
   --mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: dark;
 }
 
 :root[data-theme='light'] {
-  --bg: #f4f1ea;
-  --panel: #fbf9f4;
-  --panel-2: #efeadf;
-  --line: #d7cfbd;
-  --text: #1f2430;
-  --muted: #5d6578;
-  --accent: #1d4ed8;
-  --accent-bg: #dbe6ff;
-  --ok: #15803d;
-  --warn: #b45309;
-  color-scheme: light;
+  @include light-theme;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    @include light-theme;
+  }
 }
 
 $bp: 960px;
@@ -38,10 +56,6 @@ $bp: 960px;
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-html {
-  color-scheme: dark;
 }
 
 body {
@@ -220,7 +234,7 @@ ul {
     background: var(--panel-2);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+    box-shadow: var(--shadow);
 
     a {
       display: flex;
@@ -240,6 +254,38 @@ ul {
       }
     }
   }
+}
+
+.theme-toggle {
+  display: none; // needs JS, so hidden without it (see the .js class set in Base.astro)
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+
+  .js & {
+    display: inline-flex;
+  }
+
+  &:hover {
+    color: var(--accent);
+  }
+
+  // Show the icon of the theme you would switch TO.
+  &__sun,
+  &__moon {
+    display: none;
+  }
+}
+
+:root[data-theme='dark'] .theme-toggle__sun,
+:root[data-theme='light'] .theme-toggle__moon {
+  display: inline-flex;
 }
 
 .toggle {

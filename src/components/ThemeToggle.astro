@@ -1,0 +1,20 @@
+---
+// Light/dark switch. The icon shows the theme you would switch TO (sun while
+// dark, moon while light); portfolio.ts handles the click, keeps aria-label/title
+// in sync, and saves the choice. Hidden without JS (see .theme-toggle in main.scss).
+import { Icon } from "astro-icon/components";
+import { ui, getLang } from "../i18n/ui";
+
+const t = ui[getLang(Astro.currentLocale)];
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  aria-label={t.script.toLight}
+  title={t.script.toLight}
+>
+  <Icon name="mdi:white-balance-sunny" class="theme-toggle__sun" size={18} />
+  <Icon name="mdi:weather-night" class="theme-toggle__moon" size={18} />
+</button>

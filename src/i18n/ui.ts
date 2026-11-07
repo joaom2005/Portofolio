@@ -73,6 +73,8 @@ const en = {
     normalText: 'Browse freely, or enable Inspector for more details.',
     inspectorText: 'Showing errata: what broke and what I learned.',
     closeTab: 'Close {id} tab',
+    toLight: 'Switch to light theme',
+    toDark: 'Switch to dark theme',
   },
 };
 
@@ -122,6 +124,8 @@ const pt: typeof en = {
     normalText: 'Navega à vontade, ou ativa o Inspetor para mais detalhes.',
     inspectorText: 'A mostrar erratas: o que correu mal e o que aprendi.',
     closeTab: 'Fechar separador {id}',
+    toLight: 'Mudar para o tema claro',
+    toDark: 'Mudar para o tema escuro',
   },
 };
 

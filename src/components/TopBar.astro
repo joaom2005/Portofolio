@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import LangSwitcher from "./LangSwitcher.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 import { site, getContent } from "../data/portfolio";
 import { ui, getLang } from "../i18n/ui";
 
@@ -33,6 +34,7 @@ const { resume } = getContent(lang);
     <a class="topbar__link" href={resume} data-resume
       ><Icon name="mdi:tray-arrow-down" /> {t.topbar.resume}</a
     > |
+    <ThemeToggle /> |
     <LangSwitcher />
   </nav>
 </header>

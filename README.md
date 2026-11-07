@@ -18,6 +18,13 @@ Content lives in `src/data/portfolio.ts` (text per language in `content`, `proje
 `src/i18n/ui.ts`. Anything marked `TODO` is a placeholder. Replace the placehold.co image URLs
 with real screenshots in `public/` or `src/assets/`.
 
+## Theme
+
+Light and dark, switched with the sun/moon button in the top bar (or `T`). First visit follows the
+system setting; after a manual choice that choice is saved in localStorage and wins. The colors are
+the tokens at the top of `src/styles/main.scss`; all text pairs were checked against WCAG AA (4.5:1).
+To tweak the white theme, edit the `light-theme` mixin there.
+
 ## Languages
 
 English is served at `/` and every other language at `/<code>/` (e.g. `/pt/`), chosen from a
@@ -41,7 +48,7 @@ so Japanese text falls back to a system font.
 - `src/i18n/ui.ts` – UI strings per language
 - `src/components/` – TopBar, LangSwitcher, ProcessTable, ProjectCard, StatusBar
 - `src/scripts/portfolio.ts` – section switching, Inspector toggle, keyboard shortcuts
-- `src/styles/main.scss` – theme tokens at the top (`:root`), layout below
+- `src/styles/main.scss` – theme tokens at the top (dark in `:root`, light in the `light-theme` mixin), layout below
 
 ## Behaviour
 
@@ -49,6 +56,7 @@ so Japanese text falls back to a system font.
 - `I` toggles Inspector (state saved in localStorage). Right now it reveals the
   "errata" block on each project. Define what it should do before you build more.
 - `R` opens the résumé for the current language.
+- `T` switches between the light and dark theme.
 - Without JavaScript all sections render stacked, so the content stays readable.
 - Under 860px wide the layout becomes one column and the process table collapses.
 

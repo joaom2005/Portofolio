@@ -31,6 +31,8 @@ type UiStrings = {
   normalText: string;
   inspectorText: string;
   closeTab: string;
+  toLight: string;
+  toDark: string;
 };
 const ui: UiStrings = JSON.parse(document.body.dataset.ui ?? '{}');
 
@@ -334,6 +336,53 @@ toggles.forEach((t) => {
   t.addEventListener('click', () => setInspector(!inspector));
 });
 
+// ---- theme ------------------------------------------------------------------
+// The first value is set before paint by the inline script in Base.astro (saved
+// choice, else the system setting). Here we only handle changes.
+
+const THEME_KEY = 'portfolio:theme';
+type Theme = 'light' | 'dark';
+
+const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+const systemLight = matchMedia('(prefers-color-scheme: light)');
+
+const currentTheme = (): Theme =>
+  document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+
+function applyTheme(theme: Theme, save: boolean): void {
+  document.documentElement.dataset.theme = theme;
+
+  // The button describes what a click will do.
+  const label = theme === 'dark' ? ui.toLight : ui.toDark;
+  themeToggle?.setAttribute('aria-label', label);
+  themeToggle?.setAttribute('title', label);
+
+  if (!save) return;
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch {
+    // Storage can be unavailable (private mode); the toggle still works.
+  }
+}
+
+const toggleTheme = (): void =>
+  applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', true);
+
+themeToggle?.addEventListener('click', toggleTheme);
+
+// If the visitor never picked a theme, keep following the system setting live.
+systemLight.addEventListener('change', (e) => {
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem(THEME_KEY);
+  } catch {
+    // ignore
+  }
+  if (saved !== 'light' && saved !== 'dark') applyTheme(e.matches ? 'light' : 'dark', false);
+});
+
+applyTheme(currentTheme(), false); // sync the button label with the initial theme
+
 // ---- keyboard ---------------------------------------------------------------
 
 window.addEventListener('keydown', (e) => {
@@ -373,6 +422,8 @@ window.addEventListener('keydown', (e) => {
 
   if (k === 'i') {
     setInspector(!inspector);
+  } else if (k === 't') {
+    toggleTheme();
   } else if (k === 'r' && resume) {
     window.open(resume.href, '_blank', 'noopener');
   } else if (k >= '1' && k <= '4') {
