@@ -169,17 +169,20 @@ const buildProjects = (lang: Lang): Project[] =>
 
 // ---- everything else, per language ------------------------------------------
 
-// TODO: only list what you could talk about for ten minutes.
 const skillGroups = {
   en: [
-    { group: 'Languages', items: ['C', 'C++'] },
-    { group: 'Systems', items: ['Linux', 'AVR microcontrollers'] },
+    { group: 'Languages', items: ['C', 'C++', 'C#'] },
+    { group: 'Systems', items: ['Linux', 'AVR'] },
     { group: 'Networking', items: ['TCP/IP', 'Sockets'] },
+    { group: 'Databases', items: ['SQL', 'MySQL'] },
+    { group: 'Tools', items: ['Git/Github', 'CMake', 'Docker'] }
   ],
   pt: [
     { group: 'Linguagens', items: ['C', 'C++'] },
-    { group: 'Sistemas', items: ['Linux', 'Microcontroladores AVR'] },
+    { group: 'Sistemas', items: ['Linux', 'AVR'] },
     { group: 'Redes', items: ['TCP/IP', 'Sockets'] },
+    { group: 'Bases de Dados', items: ['SQL', 'MySQL'] },
+    { group: 'Ferramentas', items: ['Git/Github', 'Docker'] }
   ],
 };
 
